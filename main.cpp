@@ -25,7 +25,7 @@ void dump_ppm(vector<uint>* buffer, string filename, const int width, const int 
     cout << "buffer dumped in " << filename << endl;
 }
 
-void write_circle(vector<uint>* buffer, int width, int height, int radius) {
+void write_circle(vector<uint>* buffer, int width, int height, int radius, int background, int foreground) {
     uint cx = width;
     uint cy = height;
     for (int y = 0; y < height; y++) {
@@ -34,7 +34,9 @@ void write_circle(vector<uint>* buffer, int width, int height, int radius) {
             uint dy = cy - y * 2 - 1;
             int r = radius * radius;
             if ((dx * dx) + (dy * dy) <= (r)) {
-                buffer->at(y * width + x) = 0xFF00FF;
+                buffer->at(y * width + x) = foreground;
+            } else {
+                buffer->at(y * width + x) = background;
             }
         }
     }
@@ -49,11 +51,13 @@ void fill_buffer(vector<uint>* buffer, int width, int height) {
 int main() {
     const int WIDTH = 800;
     const int HEIGHT = 600;
+    const int BACKGROUND = 0x00ff00;
+    const int FOREGROUND = 0xff00ff;
     vector<uint> buffer;
     for (int i = 0; i <= WIDTH * HEIGHT; i++) {
         buffer.push_back(0);
     }
-    write_circle(&buffer, WIDTH, HEIGHT, HEIGHT / 2);
+    write_circle(&buffer, WIDTH, HEIGHT, HEIGHT / 2, BACKGROUND, FOREGROUND);
     dump_ppm(&buffer, "circle.ppm", WIDTH, HEIGHT);
     fill_buffer(&buffer, WIDTH, HEIGHT);
     return 0;
