@@ -229,7 +229,7 @@ private:
     vector<Point>* points;
 };
 
-void dump_shape_to_ppm(Shape *shape, string filename)
+void dumpShapeToPpm(Shape *shape, string filename)
 {
     ofstream image;
     cout << "dumping buffer in " << filename << endl;
@@ -261,7 +261,7 @@ int main()
     const int FOREGROUND = 0xff00ff;
     FilledCircle circle = FilledCircle(WIDTH, HEIGHT, BACKGROUND, FOREGROUND, HEIGHT / 2);
     circle.draw();
-    dump_shape_to_ppm(&circle, "circle.ppm");
+    dumpShapeToPpm(&circle, "circle.ppm");
     FilledTriangle triangle = FilledTriangle(
         WIDTH,
         HEIGHT,
@@ -271,7 +271,7 @@ int main()
         Point(600, 200),
         Point(200, 5));
     triangle.draw();
-    dump_shape_to_ppm(&triangle, "triangle.ppm");
+    dumpShapeToPpm(&triangle, "triangle.ppm");
     FilledRectangle square = FilledRectangle(
         WIDTH,
         HEIGHT,
@@ -282,7 +282,7 @@ int main()
         Point(600, 400),
         Point(200, 500));
     square.draw();
-    dump_shape_to_ppm(&square, "square.ppm");
+    dumpShapeToPpm(&square, "square.ppm");
     vector<Point> points;
     points.push_back(Point(100, 100));
     points.push_back(Point(100, 600));
@@ -296,6 +296,6 @@ int main()
         &points
     );
     polygon.draw();
-    dump_shape_to_ppm(&polygon, "polygon.ppm");
+    dumpShapeToPpm(&polygon, "polygon.ppm");
     return 0;
 }
