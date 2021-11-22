@@ -172,7 +172,7 @@ int main()
 {
     const int WIDTH = 800;
     const int HEIGHT = 600;
-    const int BACKGROUND = 0x00ff00;
+    const int BACKGROUND = 0xffff00;
     const int FOREGROUND = 0xff00ff;
     FilledCircle circle = FilledCircle(WIDTH, HEIGHT, BACKGROUND, FOREGROUND, HEIGHT / 2);
     circle.draw();
