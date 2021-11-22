@@ -192,6 +192,43 @@ private:
     Point d;
 };
 
+
+// FIXME: something wrong with checking does point belong to polygon or not
+class FilledPolygon : public Shape {
+public:
+    FilledPolygon(
+        int width,
+        int height,
+        int foreground,
+        int background,
+        vector<Point>* points
+        ) : Shape(width, height, foreground, background) {
+            this->points = points;
+        }
+
+    void draw() override
+    {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int j = points->size() - 1;
+                for (int i = 0; i < points->size(); i++) {
+                    if (points->at(i).y < y && points->at(j).y >= y || points->at(j).y < y && points->at(i).y >= y) {
+                        if (points->at(i).x + (y - points->at(i).y) / (points->at(j).y - points->at(i).y) * (points->at(j).x - points->at(i).x) < x) {
+                            buffer.at(y * width + x) = foreground;
+                        } else {
+                            buffer.at(y * width + x) = background;
+                        }
+                    }
+                }
+            }
+        }
+    }
+private:
+    vector<Point>* points;
+};
+
 void dump_shape_to_ppm(Shape *shape, string filename)
 {
     ofstream image;
@@ -246,5 +283,19 @@ int main()
         Point(200, 500));
     square.draw();
     dump_shape_to_ppm(&square, "square.ppm");
+    vector<Point> points;
+    points.push_back(Point(100, 100));
+    points.push_back(Point(100, 600));
+    points.push_back(Point(600, 400));
+    points.push_back(Point(200, 500));
+    FilledPolygon polygon = FilledPolygon(
+        WIDTH,
+        HEIGHT,
+        BACKGROUND,
+        FOREGROUND,
+        &points
+    );
+    polygon.draw();
+    dump_shape_to_ppm(&polygon, "polygon.ppm");
     return 0;
 }
