@@ -4,6 +4,23 @@
 #include <fstream>
 using namespace std;
 
+class Point
+{
+public:
+    int x;
+    int y;
+    Point()
+    {
+        this->x = 0;
+        this->y = 0;
+    };
+    Point(int x, int y)
+    {
+        this->x = x;
+        this->y = y;
+    };
+};
+
 class Shape
 {
 public:
@@ -87,6 +104,46 @@ public:
     }
 };
 
+class FilledTriangle : public Shape
+{
+public:
+    FilledTriangle(
+        int width,
+        int height,
+        int foreground,
+        int background,
+        Point a,
+        Point b,
+        Point c) : Shape(width, height, foreground, background)
+    {
+        this->a = a;
+        this->b = b;
+        this->c = c;
+    };
+
+    void draw() override {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int da = (a.x - x) * (b.y - a.y) - (b.x - a.x) * (a.y - y);
+                int db = (b.x - x) * (c.y - b.y) - (c.x - b.x) * (b.y - y);
+                int dc = (c.x - x) * (a.y - c.y) - (a.x - c.x) * (c.y * y);
+                if ((da >= 0 && db >= 0 && dc >= 0) || (da <= 0 && db <= 0 && dc <= 0)) {
+                    buffer.at(y * width + x) = foreground;
+                } else {
+                    buffer.at(y * width + x) = background;
+                }
+            }
+        }
+    }
+
+private:
+    Point a;
+    Point b;
+    Point c;
+};
+
 void dump_shape_to_ppm(Shape *shape, string filename)
 {
     ofstream image;
@@ -120,5 +177,16 @@ int main()
     FilledCircle circle = FilledCircle(WIDTH, HEIGHT, BACKGROUND, FOREGROUND, HEIGHT / 2);
     circle.draw();
     dump_shape_to_ppm(&circle, "circle.ppm");
+    FilledTriangle triangle = FilledTriangle(
+        WIDTH,
+        HEIGHT,
+        BACKGROUND,
+        FOREGROUND,
+        Point(200, 505),
+        Point(600, 200),
+        Point(200, 5)
+        );
+    triangle.draw();
+    dump_shape_to_ppm(&triangle, "triangle.ppm");
     return 0;
 }
