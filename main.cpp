@@ -121,7 +121,8 @@ public:
         this->c = c;
     };
 
-    void draw() override {
+    void draw() override
+    {
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -129,7 +130,50 @@ public:
                 int da = (a.x - x) * (b.y - a.y) - (b.x - a.x) * (a.y - y);
                 int db = (b.x - x) * (c.y - b.y) - (c.x - b.x) * (b.y - y);
                 int dc = (c.x - x) * (a.y - c.y) - (a.x - c.x) * (c.y * y);
-                if ((da >= 0 && db >= 0 && dc >= 0) || (da <= 0 && db <= 0 && dc <= 0)) {
+                if ((da >= 0 && db >= 0 && dc >= 0) || (da <= 0 && db <= 0 && dc <= 0))
+                {
+                    buffer.at(y * width + x) = foreground;
+                }
+                else
+                {
+                    buffer.at(y * width + x) = background;
+                }
+            }
+        }
+    }
+
+private:
+    Point a;
+    Point b;
+    Point c;
+};
+
+class FilledRectangle : public Shape
+{
+public:
+    FilledRectangle(
+        int width,
+        int height,
+        int foreground,
+        int background,
+        Point a,
+        Point b,
+        Point c,
+        Point d) : Shape(width, height, foreground, background)
+    {
+        this->a = a;
+        this->b = b;
+        this->c = c;
+        this->d = d;
+    };
+
+    void draw() override
+    {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if ((x > a.x && x < c.x) && (y > a.y && y < c.y)) {
                     buffer.at(y * width + x) = foreground;
                 } else {
                     buffer.at(y * width + x) = background;
@@ -142,6 +186,7 @@ private:
     Point a;
     Point b;
     Point c;
+    Point d;
 };
 
 void dump_shape_to_ppm(Shape *shape, string filename)
@@ -184,9 +229,20 @@ int main()
         FOREGROUND,
         Point(200, 505),
         Point(600, 200),
-        Point(200, 5)
-        );
+        Point(200, 5));
     triangle.draw();
     dump_shape_to_ppm(&triangle, "triangle.ppm");
+    FilledRectangle square = FilledRectangle(
+        WIDTH,
+        HEIGHT,
+        BACKGROUND,
+        FOREGROUND,
+        Point(100, 100),
+        Point(100, 600),
+        Point(600, 400),
+        Point(200, 500)
+        );
+    square.draw();
+    dump_shape_to_ppm(&square, "square.ppm");
     return 0;
 }
