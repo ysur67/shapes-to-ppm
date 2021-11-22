@@ -173,9 +173,12 @@ public:
         {
             for (int x = 0; x < width; x++)
             {
-                if ((x > a.x && x < c.x) && (y > a.y && y < c.y)) {
+                if ((x > a.x && x < c.x) && (y > a.y && y < c.y))
+                {
                     buffer.at(y * width + x) = foreground;
-                } else {
+                }
+                else
+                {
                     buffer.at(y * width + x) = background;
                 }
             }
@@ -240,8 +243,7 @@ int main()
         Point(100, 100),
         Point(100, 600),
         Point(600, 400),
-        Point(200, 500)
-        );
+        Point(200, 500));
     square.draw();
     dump_shape_to_ppm(&square, "square.ppm");
     return 0;
