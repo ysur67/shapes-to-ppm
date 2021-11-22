@@ -87,30 +87,6 @@ public:
     }
 };
 
-void dump_ppm(vector<uint> *buffer, string filename, const int width, const int height)
-{
-    ofstream image;
-    cout << "dumping buffer in " << filename << endl;
-    image.open(filename);
-    {
-        image << "P3 " << endl;
-        image << width << " " << height << " 255" << endl;
-    }
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            uint pixel = buffer->at(y * width + x);
-            auto r = pixel >> 8 * 0 & 0xff;
-            auto g = pixel >> 8 * 1 & 0xff;
-            auto b = pixel >> 8 * 2 & 0xff;
-            image << r << " " << g << " " << b << endl;
-        }
-    }
-    image.close();
-    cout << "buffer dumped in " << filename << endl;
-}
-
 void dump_shape_to_ppm(Shape *shape, string filename)
 {
     ofstream image;
